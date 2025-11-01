@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>English → Irish Lookup</title>
+  <style>
+    body { background-color: grey; font-family: Arial, sans-serif; color: #111; padding: 24px; }
+    h1 { margin: 0 0 12px 0; }
+    label { display: block; margin-bottom: 8px; }
+    input[type="text"] { width: 100%; max-width: 520px; padding: 8px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>English → Irish Lookup</h1>
+  <label for="boxu">What English word would you like to translate to Irish? Type below, then press Enter.</label>
+  <input type="text" id="boxu" autofocus placeholder="Type an English word and press Enter">
+
+  <script>
+  document.getElementById("boxu").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      var q = encodeURIComponent(this.value.trim());
+      if (!q) return;
+      // Open Pixabay and Focloir results in new tabs
+      window.open("https://pixabay.com/images/search/" + q, "_blank");
+      window.open("https://images.google.com");
+      window.open("https://www.focloir.ie/en/dictionary/ei/" + q, "_blank");
+      this.value = "";
+    }
+  });
+  </script>
+</body>
+</html>
