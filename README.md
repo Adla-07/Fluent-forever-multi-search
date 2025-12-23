@@ -3,7 +3,7 @@
 Small project that opens a focloir.ie dictionary entry and a Pixabay image search from a local HTML page, and adds a Tampermonkey userscript to replace Connacht pronunciation audio spans on focloir.ie with a working "Copy link" button.
 
 ## Files
-- `Irish.html` — local search UI. Type an English word and press Enter to open:
+- `index.html` — local search UI. Type an English word and press Enter to open:
   - Pixabay images search for the word
   - focloir.ie dictionary entry for the word
 - `Irish-Tampermonkey.js` — Tampermonkey/Violentmonkey userscript that:
@@ -14,18 +14,18 @@ Small project that opens a focloir.ie dictionary entry and a Pixabay image searc
 ## Prerequisites
 - Opera (or any Chromium-based browser)
 - Tampermonkey or Violentmonkey extension installed in Opera
-- A local HTTP server or VS Code Live Server (recommended) to serve `Irish.html`
+- A local HTTP server or VS Code Live Server (recommended) to serve `index.html`
 
 ## Quick start
 
 1. Serve the project folder
-   - Recommended: open the folder in VS Code and use the Live Server extension (`Go Live`) to serve `Irish.html`.
+   - Recommended: open the folder in VS Code and use the Live Server extension (`Go Live`) to serve `index.html`.
    - Alternative (PowerShell): run a small server script (or use Python/Node if available).
 
-2. Open `Irish.html` in Opera
+2. Open `index.html` in Opera
    - From PowerShell (if using localhost:8000):
-     Start-Process "C:\Program Files\Opera\launcher.exe" "http://localhost:8000/Irish.html"
-   - Or copy the Live Server URL (e.g. `http://127.0.0.1:5500/Irish.html`) into Opera.
+     Start-Process "C:\Program Files\Opera\launcher.exe" "http://localhost:8000/index.html"
+   - Or copy the Live Server URL (e.g. `http://127.0.0.1:5500/index.html`) into Opera.
 
 3. Install the userscript
    - Install Tampermonkey or Violentmonkey for Opera (Opera Add‑ons store or via "Install Chrome Extensions" + Chrome Web Store).
@@ -33,7 +33,7 @@ Small project that opens a focloir.ie dictionary entry and a Pixabay image searc
    - Save and enable the script. It includes `@match https://www.focloir.ie/*` and runs at `document-idle`.
 
 4. Use the tool
-   - In `Irish.html`, type an English word and press Enter.
+   - In `index.html`, type an English word and press Enter.
    - Two tabs should open: Pixabay and the focloir.ie entry.
    - On focloir.ie the userscript will replace Connacht pronunciation audio spans with a "Copy link" button. Click the button to copy the MP3 URL to the clipboard.
 
@@ -52,3 +52,4 @@ Small project that opens a focloir.ie dictionary entry and a Pixabay image searc
 
 ## License
 Use as you like. No warranty.
+
