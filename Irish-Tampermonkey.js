@@ -10,8 +10,6 @@
 (function () {
   'use strict';
 
-  const TARGET_TITLE = 'Click to hear the Connacht pronunciation';
-
   function copyTextToClipboard(text) {
     if (!text) return Promise.reject(new Error('No text to copy'));
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -41,21 +39,46 @@
 
   function shouldReplaceSpan(el) {
     if (!el || el.nodeType !== 1) return false;
-    if (!el.classList.contains('dialect') || !el.classList.contains('audio_play_button')) return false;
+    if (!el.classList.contains('pron_sound')) return false;
     if (el.dataset.ffProcessed) return false;
-    const title = el.getAttribute('title') || '';
-    if (title !== TARGET_TITLE) return false;
-    const txt = (el.textContent || '').trim();
-    // require the small 'c' content as in your example (allow 'c' or starting with 'c')
-    if (!txt || !(txt === 'c' || txt.startsWith('c'))) return false;
     return true;
+  }
+
+  function extractSoundBase(onclickValue) {
+    if (!onclickValue) return '';
+    const match = onclickValue.match(/playSound\(['"]([^'"]+)\.wav['"]\)/);
+    return match ? match[1] : '';
+  }
+
+  function normalizeSoundBase(base) {
+    if (!base) return '';
+    const withoutDialect = base.replace(/_[a-z]$/i, '');
+    const fadaMap = {
+      a: 'á',
+      e: 'é',
+      i: 'í',
+      o: 'ó',
+      u: 'ú',
+      A: 'Á',
+      E: 'É',
+      I: 'Í',
+      O: 'Ó',
+      U: 'Ú'
+    };
+    return withoutDialect.replace(/([aeiou])_x/gi, function (match, vowel) {
+      return fadaMap[vowel] || match;
+    });
   }
 
   function processElement(el) {
     if (!shouldReplaceSpan(el)) return;
     el.dataset.ffProcessed = '1';
 
-    const mp3 = el.getAttribute('data-src-mp3') || el.dataset.srcMp3 || '';
+    const soundBase = extractSoundBase(el.getAttribute('onclick') || '');
+    const normalizedBase = normalizeSoundBase(soundBase);
+    const mp3 = normalizedBase
+      ? 'https://www.teanglann.ie/CanC/' + encodeURI(normalizedBase) + '.mp3'
+      : '';
     const wrapper = document.createElement('span');
     wrapper.className = (el.className || '') + ' ff-modified';
     wrapper.style.display = 'inline-block';
@@ -113,7 +136,7 @@
 
   function scanAndProcess(root) {
     root = root || document;
-    const candidates = root.querySelectorAll('span.dialect.audio_play_button[title="' + TARGET_TITLE + '"]');
+    const candidates = root.querySelectorAll('span.pron_sound');
     candidates.forEach(processElement);
   }
 
@@ -126,7 +149,7 @@
       if (m.type !== 'childList') continue;
       m.addedNodes.forEach(function (node) {
         if (!node || node.nodeType !== 1) return;
-        if (node.matches && node.matches('span.dialect.audio_play_button[title="' + TARGET_TITLE + '"]')) {
+        if (node.matches && node.matches('span.pron_sound')) {
           processElement(node);
         } else {
           // scan subtree for matching spans
