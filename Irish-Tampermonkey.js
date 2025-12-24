@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Irish-Tampermonkey.js
 // @namespace    http://local/
-// @version      1.3
+// @version      1.4
 // @description  Replace Connacht pronunciation audio spans with a working "Copy link" button (copies data-src-mp3). Watches for dynamic content.
 // @match        https://www.focloir.ie/*
 // @match        https://focloir.ie/*
@@ -81,11 +81,23 @@
       ? 'https://www.teanglann.ie/CanC/' + encodeURI(normalizedBase) + '.mp3'
       : '';
     const wrapper = document.createElement('span');
-    wrapper.className = (el.className || '') + ' ff-modified';
-    wrapper.style.display = 'inline-block';
-    wrapper.style.margin = '0 6px';
-    wrapper.style.verticalAlign = 'middle';
-    wrapper.style.pointerEvents = 'auto'; // ensure clickable if site styles interfere
+    const remainingClasses = Array.from(el.classList || []).filter(function (c) {
+      return c !== 'pron_sound';
+    });
+    wrapper.className = (remainingClasses.join(' ') + ' ff-modified').trim();
+    Object.assign(wrapper.style, {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '6px',
+      margin: '0 6px',
+      verticalAlign: 'middle',
+      pointerEvents: 'auto', // ensure clickable if site styles interfere
+      textIndent: '0',
+      width: 'auto',
+      height: 'auto',
+      overflow: 'visible',
+      background: 'transparent'
+    });
     wrapper.title = el.getAttribute('title') || '';
 
     const btn = document.createElement('button');
