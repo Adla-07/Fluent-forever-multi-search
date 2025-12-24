@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         Irish-Tampermonkey.js
 // @namespace    http://local/
-// @version      1.2
+// @version      1.3
 // @description  Replace Connacht pronunciation audio spans with a working "Copy link" button (copies data-src-mp3). Watches for dynamic content.
 // @match        https://www.focloir.ie/*
+// @match        https://focloir.ie/*
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
